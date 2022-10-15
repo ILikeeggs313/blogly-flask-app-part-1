@@ -1,13 +1,10 @@
 """Models for Blogly."""
 from flask_sqlalchemy import SQLAlchemy
+import datetime
 db = SQLAlchemy()
 
 DEFAULT_URL = "https://www.freeiconspng.com/uploads/icon-user-blue-symbol-people-person-generic--public-domain--21.png"
 
-def connect_db(app):
-
-    db.app = app 
-    db.init_app(app)
 
 #models go below:
 class User(db.Model):
@@ -35,3 +32,24 @@ class User(db.Model):
 
     
     #primary key means unique and not null in SQL for id
+
+#part 2
+class Post(db.Model):
+    """Blog post."""
+    __tablename__ = 'posts'
+    id = db.Column(db.Integer, primary_key = True)
+
+    title = db.Column(db.Text, db.String(200), nullable = False)
+
+    content = db.Column(db.Text, nullable = False)
+
+    created_at = db.Column(db.DateTime, nullable = False,
+    default = datetime.datetime.now)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'),
+    nullable = False)
+
+def connect_db(app):
+
+    db.app = app 
+    db.init_app(app)
